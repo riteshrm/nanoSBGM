@@ -1,22 +1,45 @@
 # nanoSBGM
 
-Minimal **score-based generative modeling (SBGM)** experiments in PyTorch with **three SDE parameterizations** and their corresponding **probability-flow ODE (PF-ODE)** samplers.
+Minimal PyTorch implementations of **score-based generative modeling (SBGM)** with:
 
-Accompanying notes (derivations + intuition): https://riteshrm.github.io/posts/score-matching/
+* **VE SDE** (Variance Exploding)
+* **VP SDE** (Variance Preserving)
+* **sub-VP SDE**
 
-## What’s implemented
+and their corresponding **probability-flow ODE (PF-ODE)** samplers, using a lightweight DiT-based score network.
 
-This repo contains three standalone training scripts (each script defines the SDE, loss, and both samplers):
+## Features
 
-- **VE SDE** (Variance Exploding): `VESDE.py`
-- **VP SDE** (Variance Preserving): `VPSDE.py`
-- **sub-VP SDE**: `subVPSDE.py`
+* Minimal and readable implementations
+* Three common SDE parameterizations (VE / VP / sub-VP)
+* Score matching training objective
+* Stochastic sampling via Euler–Maruyama
+* Deterministic PF-ODE sampling
+* Equation-aligned code
+* Educational focus
 
-Each script provides:
+## Repository Structure
 
-- A denoising score-matching style objective (`loss(...)`)
-- An SDE sampler (`sample(...)`, Euler–Maruyama)
-- A PF-ODE sampler (`sample_pf_ode(...)`, deterministic)
+```text
+nanoSBGM/
+├── VESDE.py
+├── VPSDE.py
+├── subVPSDE.py
+└── model.py
+```
+
+## Theory and Derivations
+
+Detailed explanations and mathematical derivations are available in the accompanying blog post:
+
+* [Score Matching Notes](https://riteshrm.github.io/posts/score-matching/)
+
+The notes cover:
+
+* Score matching objective
+* SDE formulation and reverse-time dynamics
+* Probability-flow ODE (PF-ODE)
+* Sampling intuition
 
 ## Data
 
@@ -30,7 +53,7 @@ snapshot_download(
 )
 ```
 
-The training scripts use `torchvision.datasets.ImageFolder`, so the directory should be laid out like:
+The training scripts use `torchvision.datasets.ImageFolder`, so `butterflies/` should be laid out like:
 
 ```
 butterflies/
@@ -39,7 +62,7 @@ butterflies/
   ...
 ```
 
-## Run
+## Usage
 
 Train with a specific SDE:
 
@@ -61,10 +84,8 @@ During training, the script periodically:
 
 Most hyperparameters (image size, model size, batch size, number of steps, etc.) are defined at the top of each script.
 
-## Model
-
-The backbone is a tiny DiT-style model in `model.py`.
-
 ## Credits
 
-- `model.py` is adapted from from [sayakpaul/nanoDiT](https://github.com/sayakpaul/nanoDiT).
+The DiT backbone implementation in `model.py` is adapted from:
+
+* https://github.com/sayakpaul/nanoDiT
